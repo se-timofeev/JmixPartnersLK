@@ -10,8 +10,9 @@ jmix {
     bomVersion = '2.0.2'
 }
 
-group = 'com.company'
+group = 'ru.planetnails.lk'
 version = '0.0.1-SNAPSHOT'
+archivesBaseName = 'jmix-partners-lk'
 
 repositories {
     mavenCentral()

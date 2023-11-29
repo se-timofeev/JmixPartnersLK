@@ -3,6 +3,7 @@
 
     <menu id="application" title="msg://com.company.jmixstart1/menu.application.title" opened="true">
         <item view="User.list" title="msg://com.company.jmixstart1.view.user/UserListView.title"/>
+        <item view="Partner.list" title="msg://com.company.jmixstart1.view.partner/partnerListView.title"/>
     </menu>
 
 </menu-config>
