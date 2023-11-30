@@ -1,6 +1,8 @@
 package com.company.jmixstart1.entity;
 
+import io.jmix.core.DeletePolicy;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.entity.annotation.OnDeleteInverse;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
@@ -13,13 +15,20 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @JmixEntity
-@Table(name = "CONTRACTOR")
+@Table(name = "CONTRACTOR", indexes = {
+        @Index(name = "IDX_CONTRACTOR_PARTNER_ID", columnList = "PARTNER_ID_ID")
+})
 @Entity
 public class Contractor {
     @JmixGeneratedValue
     @Column(name = "ID", nullable = false)
     @Id
     private UUID id;
+
+    @OnDeleteInverse(DeletePolicy.CASCADE)
+    @JoinColumn(name = "PARTNER_ID_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Partner partner_id;
 
     @InstanceName
     @Column(name = "NAME")
@@ -57,6 +66,14 @@ public class Contractor {
     @CreatedDate
     @Column(name = "CREATED_DATE")
     private OffsetDateTime createdDate;
+
+    public Partner getPartner_id() {
+        return partner_id;
+    }
+
+    public void setPartner_id(Partner partner_id) {
+        this.partner_id = partner_id;
+    }
 
     public String getActual_address() {
         return actual_address;

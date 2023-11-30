@@ -1,16 +1,19 @@
 package com.company.jmixstart1.entity;
 
+import io.jmix.core.DeletePolicy;
 import io.jmix.core.HasTimeZone;
 import io.jmix.core.annotation.Secret;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
+import io.jmix.core.entity.annotation.OnDeleteInverse;
 import io.jmix.core.entity.annotation.SystemLevel;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import io.jmix.security.authentication.JmixUserDetails;
-import org.springframework.security.core.GrantedAuthority;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import org.springframework.security.core.GrantedAuthority;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
@@ -18,12 +21,13 @@ import java.util.UUID;
 @JmixEntity
 @Entity
 @Table(name = "USER_", indexes = {
-        @Index(name = "IDX_USER__ON_USERNAME", columnList = "USERNAME", unique = true)
+        @Index(name = "IDX_USER__ON_USERNAME", columnList = "USERNAME", unique = true),
+        @Index(name = "IDX_USER__PARTNER", columnList = "PARTNER_ID")
 })
 public class User implements JmixUserDetails, HasTimeZone {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", nullable = false)
     @JmixGeneratedValue
     private UUID id;
 
@@ -49,6 +53,14 @@ public class User implements JmixUserDetails, HasTimeZone {
     @Column(name = "EMAIL")
     protected String email;
 
+    @OnDeleteInverse(DeletePolicy.CASCADE)
+    @JoinColumn(name = "PARTNER_ID")
+    @OneToOne(fetch = FetchType.LAZY)
+    private Partner partner_id;
+
+    @Column(name = "ONEC_ID")
+    private UUID onec_id;
+
     @Column(name = "ACTIVE")
     protected Boolean active = true;
 
@@ -57,6 +69,22 @@ public class User implements JmixUserDetails, HasTimeZone {
 
     @Transient
     protected Collection<? extends GrantedAuthority> authorities;
+
+    public UUID getOnec_id() {
+        return onec_id;
+    }
+
+    public void setOnec_id(UUID onec_id) {
+        this.onec_id = onec_id;
+    }
+
+    public Partner getPartner_id() {
+        return partner_id;
+    }
+
+    public void setPartner_id(Partner partner) {
+        this.partner_id = partner;
+    }
 
     public UUID getId() {
         return id;
